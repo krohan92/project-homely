@@ -1,0 +1,47 @@
+{
+  "summary": "Full backend + frontend E2E test of Homely. Backend: created pytest suite (29 tests) covering generic CRUD (list/create/patch/delete + persistence verification) for all 10 resources, unknown-resource handling, id-overwrite guard, AI catch-up, and seed endpoint -> 27/29 passed. Only failure: POST /api/seed is unreachable due to FastAPI route ordering (shadowed by POST /api/{res}). Frontend: tested Dashboard (AI catch-up render + refresh + 4 stat cards + stat navigation + upcoming events + todo toggle w/ persistence), Calendar (add/delete event), Chores (add, check -> Done + fairness points 2->6, uncheck, delete), Kids & School (add/toggle/delete homework, per-child progress bars update), Pet Care (walk/poop/fed/meds quick logs create entries + increment today counters, persists on reload), Groceries (add w/ qty+aisle grouping, check -> basket, undo, delete), Budget (add expense + income, totals recalculated 3200/362/2838 -> 3700/412/3288, recharts donut+bar render, delete tx), Home Upkeep (maintenance add/toggle/delete, todo add/toggle/delete, household members list), and mobile 390px (hamburger opens nav, auto-closes after pick, zero horizontal overflow on 5 pages). No console/page errors anywhere.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/seed", "issue": "Unreachable: the generic `POST /api/{res}` route is declared BEFORE `POST /api/seed`, so FastAPI matches res='seed'. Result: 422 (missing body) without a body, and 404 {'detail':'Unknown resource'} with a body. Reseeding the demo household from the API is impossible. Fix: move the @api.post('/seed') and @api.get('/insights/catchup') declarations ABOVE the generic /{res} routes (or exclude reserved words in the path via a regex/Literal path param).", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "DELETE /api/{res}/{id}", "issue": "Returns 200 {'deleted': id} even when the id does not exist (delete_one matched 0). Should return 404 for an unknown id."},
+      {"endpoint": "POST /api/{res}", "issue": "Returns 200 instead of 201 Created for resource creation."},
+      {"endpoint": "POST/PATCH /api/{res}", "issue": "Payload is an untyped Dict[str, Any] with no Pydantic model, so any arbitrary field/type is accepted (e.g. transactions amount can be a string, chores.done can be a number). No input validation on any write endpoint."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Global (components/Bits.jsx Pill, tone='sage')", "issues": ["Contrast failure: `sage: bg-secondary/20 text-secondary-foreground` renders WHITE text (--secondary-foreground: 0 0% 100%) on a ~20%-opacity pale green background => roughly 1.3:1 contrast, effectively invisible. Affects 'Vet: Green Paws Clinic' on Pet Care, 'every 3 months'/'every 6 months' on Home Upkeep, and the 'pet' category pill on Dashboard/Calendar. Use a dark foreground (e.g. text-secondary or a darker sage) or a solid bg-secondary with white text."]},
+      {"screen": "Calendar / Chores / Kids / Budget / Upkeep forms", "issues": ["All date inputs use the raw browser native <input type=\"date\"> picker (mm/dd/yyyy + native calendar icon) instead of the shadcn Calendar/Popover component, which is inconsistent with the warm custom design language."]},
+      {"screen": "Pet Care & Home Upkeep", "issues": ["Large left card has a big block of dead vertical space because it is stretched to match the taller right column (h-full grid stretch); consider items-start on the grid."]},
+      {"screen": "Groceries / Budget add forms", "issues": ["Form state only partially resets after submit: Groceries keeps the previously typed qty and selected aisle, Budget keeps the 'type' select on 'income' after adding an income, so the next expense is silently saved as income unless the user notices."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "HIGH: Move POST /api/seed and GET /api/insights/catchup route declarations above the generic /{res} routes so /api/seed?force=true works (currently 404/422).",
+    "Fix Pill 'sage' tone contrast in /app/frontend/src/components/Bits.jsx (white text on pale green is unreadable).",
+    "Return 404 from DELETE /api/{res}/{id} when matched_count/deleted_count is 0; use 201 for POST creates.",
+    "Add Pydantic request models (or at least per-resource validation) for POST/PATCH instead of Dict[str, Any].",
+    "Add error/loading state handling in useResource.js — refresh/add/patch/del have no try/catch, so any API failure results in an unhandled promise rejection and a silently stale UI (optimistic patch/del is never rolled back).",
+    "Reset the full form state after submit on Groceries (qty/aisle) and Budget (type).",
+    "Consider replacing native date inputs with the shadcn Calendar component for design consistency."
+  ],
+  "critical_code_review_comments": [
+    "server.py route ordering: generic catch-all `@api.post('/{res}')` declared before `@api.post('/seed')` permanently shadows it. Any future non-resource POST route added below will break the same way.",
+    "useResource.js: no try/catch anywhere. `patch`/`del` apply optimistic local updates and then await the API; if the request fails the UI keeps the wrong state with no toast and an unhandled rejection.",
+    "Write endpoints accept Dict[str, Any] with no schema, so the DB can be polluted with wrong types (e.g. transactions.amount as a string would break Number(x.amount) sums / recharts).",
+    "Both the desktop sidebar and the mobile drawer render identical data-testid values (nav-dashboard, nav-budget, ...) simultaneously in the DOM; selectors resolve to 2 elements and the hidden desktop one wins in automation. Suffix them (nav-*-desktop / nav-*-mobile) or scope by container.",
+    "Dashboard 'Spent this month' actually sums ALL expense transactions regardless of month — the label is inaccurate; same for Budget 'Income logged'/'Spent'."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "93% (27/29 pytest cases; 1 endpoint broken)", "frontend": "100% of tested flows functional (design/contrast issues only)"},
+  "seed_data_creation": "Used the auto-seeded demo household (Alex, Sam, Mia, Leo, Buddy). All test-created records were prefixed TEST_ and deleted at the end of each test; a few extra Buddy petlogs (walk/poop/food/meds by 'You') remain from the Pet Care quick-log test.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend pytest suite lives at /app/backend/tests/backend_test.py (run: cd /app/backend && python -m pytest tests/backend_test.py -v). TestSeed::test_seed_force and test_seed_no_force_is_noop are the two expected failures until the route-ordering fix lands — re-run those first. AI catch-up works (ai=true, ~5-8s, exactly 3 bullets) so allow generous waits. Frontend testid notes: open chores use chore-checkbox-{id} but DONE chores use chore-undo-{id}; groceries use grocery-check-{id}/grocery-undo-{id}; homework use homework-check-{id}; kids form input is homework-title-input. Nav testids are duplicated between the desktop sidebar and mobile drawer, so at 390px you must scope clicks as '[data-testid=\"mobile-nav\"] [data-testid=\"nav-x\"]'. All CRUD flows on Dashboard/Calendar/Chores/Kids/Pets/Groceries/Budget/Upkeep were verified working — after fixes only re-verify the seed endpoint and the Pill contrast change.",
+  "rca_of_the_issue": "POST /api/seed 404: in FastAPI, routes are matched in declaration order. /app/backend/server.py declares `@api.post('/{res}')` at line 50 and `@api.post('/seed')` at line 120, so a request to POST /api/seed is captured by the earlier dynamic route with res='seed'. Because that handler requires a JSON body it returns 422 when no body is sent, and 404 'Unknown resource' when a body is sent (since 'seed' is not in RESOURCES). Reproduce: curl -X POST '$REACT_APP_BACKEND_URL/api/seed?force=true' -H 'Content-Type: application/json' -d '{}' -> 404. Mitigation: declare the static /seed and /insights/catchup routes before the generic /{res} routes. Note the startup seeding still works because it calls the seed() coroutine directly, which is why the demo data is present despite the broken endpoint."
+}

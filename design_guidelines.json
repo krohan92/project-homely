@@ -1,0 +1,139 @@
+{
+  "theme_strategy": "Light theme strongly preferred (nature, home, cozy, pastel). Implement a toggle if absolutely necessary, but default to light mode to ensure the 'warm and cozy' family-friendly vibe.",
+  "typography": {
+    "headings": {
+      "font_family": "Nunito",
+      "styles": "Rounded, approachable, human. Use 'tracking-tight' for H1-H2. Do not use Inter or generic sans. If Nunito is unavailable, use 'Quicksand' or 'Fredoka'.",
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-black text-foreground tracking-tighter",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight",
+      "h3": "text-xl sm:text-2xl font-bold",
+      "h4": "text-lg sm:text-xl font-semibold"
+    },
+    "body": {
+      "font_family": "Figtree, Nunito, or system-ui",
+      "styles": "Highly readable, warm, clean. text-base for regular text, text-sm for labels.",
+      "text_base": "text-base leading-relaxed text-foreground/80",
+      "labels": "text-xs tracking-[0.2em] uppercase font-bold text-muted-foreground"
+    }
+  },
+  "colors": {
+    "palette_archetype": "ORGANIC & EARTHY mixed with PASTEL & SOFT (Trust, Calm, Approachability)",
+    "light_mode": {
+      "background": "#FAF8F5",
+      "foreground": "#2C2B2A",
+      "card": "#FFFFFF",
+      "card_foreground": "#2C2B2A",
+      "primary": "#E07A5F",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#81B29A",
+      "secondary_foreground": "#FFFFFF",
+      "muted": "#F0EBE1",
+      "muted_foreground": "#8C8985",
+      "accent": "#F2CC8F",
+      "accent_foreground": "#2C2B2A",
+      "border": "#E8E4DB"
+    },
+    "dark_mode": {
+      "background": "#1E1C1A",
+      "foreground": "#F5F4F0",
+      "card": "#262422",
+      "card_foreground": "#F5F4F0",
+      "primary": "#E07A5F",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#81B29A",
+      "secondary_foreground": "#FFFFFF",
+      "muted": "#363330",
+      "muted_foreground": "#A3A09A",
+      "accent": "#F2CC8F",
+      "accent_foreground": "#1E1C1A",
+      "border": "#363330"
+    },
+    "rules": [
+      "NO transparent backgrounds on surfaces with content over them.",
+      "Use #E07A5F (Terracotta) for primary actions and important alerts.",
+      "Use #81B29A (Sage) for success states, money/budgets, and completed chores.",
+      "Use #F2CC8F (Soft Sun Yellow) for AI catchup highlights and playful accents.",
+      "Tint greys with a warm orange/brown hue, never use pure #000000 or #808080."
+    ]
+  },
+  "visual_enhancers": {
+    "shadows": "Soft, diffuse shadows. shadow-[0_8px_30px_rgb(0,0,0,0.04)] for cards to feel elevated but not stark.",
+    "border_radius": "Pill-shaped (rounded-full) for buttons, large rounded corners (rounded-3xl or rounded-2xl) for cards and modules. Avoid sharp edges to maintain the 'family-friendly' vibe.",
+    "borders": "Use a subtle 1px border on cards with border-border to provide crispness alongside the soft shadows.",
+    "textures": "Subtle grain overlays can be used on the AI catch-up card to make it feel special."
+  },
+  "layouts_and_grids": {
+    "dashboard_grid": "MODE B: High Density Grid but with breathing room. grid-cols-1 md:grid-cols-3 lg:grid-cols-4. gap-6 or gap-8.",
+    "spacing": "Generous Spacing Philosophy: Use p-6 or p-8 inside cards. Use gap-8 between major sections.",
+    "alignment": "Mobile-First. Left-align text for readability, center-align empty states or AI conversational prompts."
+  },
+  "modules_and_components": {
+    "navigation": "Sidebar or top nav. If sidebar, keep it clean with rounded pill-shaped active states.",
+    "ai_catchup": "Prominent top row widget. col-span-full. Soft yellow or gradient background (warm tones), conversational tone. No login needed.",
+    "calendar_appointments": "col-span-2. Use Shadcn calendar heavily customized to remove the 'Vercel' look (make it rounded, warm colors).",
+    "chores_rotation": "List view. Avatars for partners. Strikethrough animations on completion.",
+    "kids_homework": "Card with progress bars. Friendly icons.",
+    "pet_care": "Dog walking log, vaccines. Include the dog image here.",
+    "groceries": "Checklist style. Add to list inline. Left-aligned.",
+    "budget": "Simple, non-intimidating charts. Use Shadcn charts with the secondary (sage green) color."
+  },
+  "motion": {
+    "hover": "Slight lift (-translate-y-1) and subtle shadow increase (shadow-lg) for interactive cards.",
+    "interactions": "Hover states MUST explicitly change text color or background. Active states scale down slightly (scale-95).",
+    "transitions": "Use specific transitions: transition-transform duration-200 ease-out, transition-colors duration-200. NO transition-all.",
+    "lists": "Staggered entrance animations for chores and groceries lists."
+  },
+  "icons_and_assets": {
+    "icon_library": "lucide-react (default). Use rounded variants if possible, or keep stroke width thick (2px or 2.5px) for a friendlier look.",
+    "image_urls": {
+      "ai_catchup_bg": {
+        "url": "https://images.pexels.com/photos/15558300/pexels-photo-15558300.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "hero_or_ai_background",
+        "description": "Warm living room with fireplace, used as a very low opacity background for the AI catchup section to feel 'homely'."
+      },
+      "family_avatar_1": {
+        "url": "https://images.pexels.com/photos/38407506/pexels-photo-38407506.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "avatars",
+        "description": "Family portrait for household settings or partner chore rotation."
+      },
+      "pet_dog": {
+        "url": "https://images.pexels.com/photos/144608/pexels-photo-144608.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "pet_care",
+        "description": "Playful dog portrait for the dog appointments and care module."
+      },
+      "groceries": {
+        "url": "https://images.pexels.com/photos/9070106/pexels-photo-9070106.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "category": "groceries",
+        "description": "Woman selecting fresh produce, can be used in the empty state of the groceries module."
+      }
+    }
+  },
+  "component_instructions_to_main_agent": [
+    "Prioritize creating custom UI using raw HTML+Tailwind for high-level layouts, but USE Shadcn UI for complex interactives (Calendar, Checkbox, Select, Dialog).",
+    "Customize Shadcn components: increase border-radius (e.g., rounded-2xl for cards, rounded-full for buttons), use the defined warm color palette, and soften the borders.",
+    "Data structure: Mock the data thoroughly for the family (2 partners, kids, dog), prepopulate tasks, chores, and budgets to make the dashboard look active and 'lived-in'.",
+    "AI Catchup: Create a specialized card at the top that summarizes the week (e.g., 'Good morning! Dog has a vet appointment tomorrow, and you are under budget this week.').",
+    "Use 'sonner' for toast notifications when checking off chores or adding groceries.",
+    "NO placeholder text for logos or missing images. Use the provided image URLs.",
+    "Every interactive element MUST have a 'data-testid' attribute (e.g., data-testid='chore-checkbox', data-testid='add-grocery-btn').",
+    "Do not center-align the app container. Remove .App { text-align: center; } if present in App.css."
+  ],
+  "accessibility": {
+    "contrast": "Ensure all text, especially white text on primary buttons or Terracotta text on warm backgrounds, passes APCA/WCAG AA minimums.",
+    "focus": "focus:ring-2 focus:ring-primary/50 focus:outline-none for all inputs and buttons."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid the 'AI slop' aesthetic. Make creative, distinctive frontends that surprise and delight.",
+    "Do NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "You MUST NOT apply universal transition (e.g. transition: all). Always add transitions for specific interactive elements excluding transforms.",
+    "You MUST NOT center align the app container. This disrupts natural reading flow.",
+    "Always use modern button styles like pill-shaped, with interaction animations & color relevant to the app style.",
+    "NEVER use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 for icons. Use lucide-react icons.",
+    "Every interaction needs micro-animations - hover states, transitions, entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "All interactive and key informational elements MUST include a data-testid attribute."
+  ]
+}

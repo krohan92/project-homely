@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Figtree:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 36 33% 97%;
+        --foreground: 30 4% 17%;
+        --card: 0 0% 100%;
+        --card-foreground: 30 4% 17%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 30 4% 17%;
+        --primary: 13 67% 63%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 151 24% 60%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 41 33% 91%;
+        --muted-foreground: 34 6% 45%;
+        --accent: 37 79% 76%;
+        --accent-foreground: 30 4% 17%;
+        --destructive: 4 66% 56%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 41 22% 88%;
+        --input: 41 22% 88%;
+        --ring: 13 67% 63%;
+        --chart-1: 13 67% 63%;
+        --chart-2: 151 24% 60%;
+        --chart-3: 37 79% 76%;
+        --chart-4: 250 10% 58%;
+        --chart-5: 200 30% 60%;
+        --radius: 1rem;
+    }
+    .theme-meadow {
+        --background: 60 20% 96%;
+        --foreground: 150 14% 15%;
+        --card: 0 0% 100%;
+        --card-foreground: 150 14% 15%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 150 14% 15%;
+        --primary: 151 30% 42%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 25 60% 55%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 80 22% 90%;
+        --muted-foreground: 150 8% 42%;
+        --accent: 44 70% 72%;
+        --accent-foreground: 150 14% 15%;
+        --border: 80 18% 86%;
+        --input: 80 18% 86%;
+        --ring: 151 30% 42%;
+    }
+    .theme-dusk, .dark {
+        --background: 30 6% 11%;
+        --foreground: 40 20% 95%;
+        --card: 30 6% 14%;
+        --card-foreground: 40 20% 95%;
+        --popover: 30 6% 14%;
+        --popover-foreground: 40 20% 95%;
+        --primary: 13 67% 63%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 151 24% 60%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 30 6% 20%;
+        --muted-foreground: 40 5% 64%;
+        --accent: 37 79% 76%;
+        --accent-foreground: 30 6% 11%;
+        --destructive: 4 66% 46%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 30 6% 20%;
+        --input: 30 6% 20%;
+        --ring: 13 67% 63%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        margin: 0;
+        font-family: 'Figtree', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, .font-display {
+        font-family: 'Nunito', system-ui, sans-serif;
+    }
+    ::selection {
+        background: hsl(37 79% 76%);
+        color: hsl(30 4% 17%);
+    }
+}
+
+.grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");
+}
+
+body {
+    background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-attachment: fixed;
+}
+
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.float-slow { animation: float-slow 7s ease-in-out infinite; }
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+}
